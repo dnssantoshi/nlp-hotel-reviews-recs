@@ -1,2 +1,2 @@
 # nlp-hotel-reviews-recs
-This is a stream-lit app providing hotel recommendations with input query text from user about what features and kind of the hotel need to be included - the training is based on the hotel reviews
+This is a stream-lit app providing San Francisco hotel recommendations with input text from user about what features and kind of the hotel they are looking for - the training is based on the hotel customer reviews. 

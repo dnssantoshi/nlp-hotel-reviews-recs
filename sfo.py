@@ -18,6 +18,7 @@ from wordcloud import WordCloud
 
 st.title("San Francisco Hotel Finder")
 
+
 @st.cache(persist=True)
 def load_data():
     df = pd.read_csv("https://datahub.io/machine-learning/iris/r/iris.csv")
@@ -35,7 +36,7 @@ class SFOHotelRecs:
         self.embedder = SentenceTransformer('all-MiniLM-L6-v2')
 
     def load_data(self):
-        #load the data from pickle files
+        # load the data from pickle files
         corpus = pd.read_pickle('corpus.pkl')
         corpus_embeddings = pd.read_pickle('corpus_embeddings.pkl')
         df_agg_reviews = pd.read_pickle('df_agg_reviews.pkl')
@@ -49,19 +50,19 @@ class SFOHotelRecs:
             '<p class="font-style"><b>SFO Hotel Search Criteria</b></p>',
             unsafe_allow_html=True
         )
+
         num_recs = st.sidebar.selectbox(
             f"Please Select the Number of Top Hotels",
-            sorted(range(1, 6))
-        )
+            sorted(range(1, 6)), index=1)
 
-        query = st.sidebar.text_area("Please Enter Your Search (Required)",'Hotels in San Francisco')
+        query = st.sidebar.text_area("Please Enter Your Search (Required)", 'Hotels in San Francisco')
 
         if not query:
             st.sidebar.warning("Please fill out all required fields")
 
         return num_recs, query
 
-    def plot_wordCloud(self,corpus):
+    def plot_wordCloud(self, corpus):
         # Create and generate a word cloud image:
         wordcloud = WordCloud(max_font_size=50, max_words=100, background_color="black").generate(corpus)
 
@@ -72,7 +73,7 @@ class SFOHotelRecs:
         st.set_option('deprecation.showPyplotGlobalUse', False)
         st.pyplot()
 
-    def display_query(self,query):
+    def display_query(self, query):
         # display the search query
         nlp = spacy.load("en_core_web_sm")
         doc = nlp(query)
@@ -98,7 +99,9 @@ class SFOHotelRecs:
         for score, idx in zip(top_results[0], top_results[1]):
             row_dict = df_agg_reviews.loc[df_agg_reviews['review_body'] == corpus[idx]]['hotelName'].values[0]
             summary = df_agg_summary.loc[df_agg_summary['review_body'] == corpus[idx]]['summary']
-            st.write(HTML_WRAPPER.format("<b>Hotel Name:  </b>"+re.sub(r'[0-9]+', '', row_dict)+"(Score: {:.4f})".format(score)+"<br/><br/><b>Hotel Summary:  </b>"+summary.values[0]),unsafe_allow_html=True)
+            st.write(HTML_WRAPPER.format(
+                "<b>Hotel Name:  </b>" + re.sub(r'[0-9]+', '', row_dict) + "(Score: {:.4f})".format(
+                    score) + "<br/><br/><b>Hotel Summary:  </b>" + summary.values[0]), unsafe_allow_html=True)
             self.plot_wordCloud(corpus[idx])
         print("\nCompleted corpus:")
 
@@ -133,5 +136,5 @@ class SFOHotelRecs:
         return self
 
 
-sfo=SFOHotelRecs()
+sfo = SFOHotelRecs()
 sfo.construct_app()

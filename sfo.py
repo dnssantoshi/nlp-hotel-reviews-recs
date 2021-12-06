@@ -3,7 +3,7 @@
 """
 
 
-@author: hamzafarooq@ MABA CLASS
+@author: Santoshi Diddi
 """
 
 import streamlit as st

@@ -1,22 +1,11 @@
-import numpy as np
 import pandas as pd
 import streamlit as st
-import plotly.graph_objects as go
-import spacy
-from spacy import displacy
-import torch
 from spacy.lang.en.stop_words import STOP_WORDS
-from collections import Counter
-from heapq import nlargest
-from string import punctuation
-from sentence_transformers import SentenceTransformer, util
-import scipy.spatial
+from sentence_transformers import SentenceTransformer
 import pickle as pkl
 from tqdm import tqdm
 import re
-from transformers import pipeline
 from summarizer import Summarizer
-import matplotlib.pyplot as plt
 
 # Define Constants
 HTML_WRAPPER = """<div style="overflow-x: auto; border: 1px solid #e6e9ef; border-radius: 0.25rem; padding: 1rem; margin-bottom: 2.5rem">{}</div>"""
@@ -88,12 +77,9 @@ class HotelRecs:
             pkl.dump(df_agg_summary, file4)
 
         return df_agg_summary, df_agg_reviews, corpus, corpus_embeddings
-        # return  df_agg_reviews, corpus, corpus_embeddings
 
     def construct_app(self):
-        self.clean_data()
         df_agg_summary, df_agg_reviews, corpus, corpus_embeddings = self.clean_data()
-        # df_agg_reviews, corpus, corpus_embeddings = self.clean_data()
 
         st.markdown(
             """
